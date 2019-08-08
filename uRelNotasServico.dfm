@@ -1,10 +1,9 @@
 object uRelImprimirNFSe: TuRelImprimirNFSe
-  Left = 295
-  Top = 181
-  BorderStyle = bsNone
+  Left = 169
+  Top = 124
+  Width = 1043
+  Height = 549
   Caption = 'Relat'#243'rio de Notas de Servi'#231'o'
-  ClientHeight = 389
-  ClientWidth = 963
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,22 +19,22 @@ object uRelImprimirNFSe: TuRelImprimirNFSe
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 963
-    Height = 389
+    Width = 1027
+    Height = 510
     Align = alClient
     TabOrder = 0
     object Panel2: TPanel
       Left = 1
-      Top = 113
-      Width = 961
-      Height = 275
+      Top = 109
+      Width = 1025
+      Height = 400
       Align = alClient
-      TabOrder = 0
+      TabOrder = 1
       object SMDBGrid1: TSMDBGrid
         Left = 1
         Top = 1
-        Width = 959
-        Height = 273
+        Width = 1023
+        Height = 398
         Align = alClient
         DataSource = dsPadrao
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgMultiSelect]
@@ -64,76 +63,96 @@ object uRelImprimirNFSe: TuRelImprimirNFSe
         WidthOfIndicator = 23
         DefaultRowHeight = 17
         ScrollBars = ssHorizontal
-        ColCount = 13
+        ColCount = 14
         RowCount = 2
         Columns = <
           item
             Expanded = False
             FieldName = 'NUMERO'
+            Title.Alignment = taCenter
             Width = 73
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'COD_CADCLI'
+            Title.Alignment = taCenter
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'DATA_EMISSAO'
+            Title.Alignment = taCenter
             Width = 82
             Visible = True
           end
           item
             Expanded = False
+            FieldName = 'SITUACAO'
+            Title.Alignment = taCenter
+            Title.Caption = 'Situa'#231#227'o'
+            Width = 50
+            Visible = True
+          end
+          item
+            Expanded = False
             FieldName = 'CEMP'
+            Title.Alignment = taCenter
+            Width = 78
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'SERIE'
-            Width = 64
+            Title.Alignment = taCenter
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'VALOR_TOTAL'
+            Title.Alignment = taCenter
             Width = 64
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'ISSQN_VALOR'
-            Width = 64
+            Title.Alignment = taCenter
+            Width = 72
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'IRRF_VALOR'
+            Title.Alignment = taCenter
             Width = 64
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'PIS_VALOR'
+            Title.Alignment = taCenter
             Width = 64
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'COFINS_VALOR'
+            Title.Alignment = taCenter
             Width = 64
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'CSLL_VALOR'
+            Title.Alignment = taCenter
             Width = 64
             Visible = True
           end
           item
             Expanded = False
             FieldName = 'XML'
+            Title.Alignment = taCenter
             Visible = True
           end>
       end
@@ -141,17 +160,17 @@ object uRelImprimirNFSe: TuRelImprimirNFSe
     object Panel3: TPanel
       Left = 1
       Top = 1
-      Width = 961
-      Height = 112
+      Width = 1025
+      Height = 108
       Align = alTop
-      TabOrder = 1
+      TabOrder = 0
       object GroupBox1: TGroupBox
-        Left = 232
-        Top = 16
+        Left = 342
+        Top = 5
         Width = 185
-        Height = 65
+        Height = 97
         Caption = 'Data'
-        TabOrder = 0
+        TabOrder = 2
         object Label1: TLabel
           Left = 8
           Top = 22
@@ -161,7 +180,7 @@ object uRelImprimirNFSe: TuRelImprimirNFSe
         end
         object Label2: TLabel
           Left = 13
-          Top = 43
+          Top = 59
           Width = 25
           Height = 13
           Caption = 'Final:'
@@ -176,7 +195,7 @@ object uRelImprimirNFSe: TuRelImprimirNFSe
         end
         object DateFinal: TDateEdit
           Left = 40
-          Top = 35
+          Top = 51
           Width = 121
           Height = 21
           NumGlyphs = 2
@@ -184,12 +203,12 @@ object uRelImprimirNFSe: TuRelImprimirNFSe
         end
       end
       object BitBtn1: TBitBtn
-        Left = 424
-        Top = 53
+        Left = 782
+        Top = 74
         Width = 129
         Height = 28
         Caption = 'Imprimir'
-        TabOrder = 1
+        TabOrder = 3
         OnClick = BitBtn1Click
         Glyph.Data = {
           76010000424D7601000000000000760000002800000020000000100000000100
@@ -208,30 +227,31 @@ object uRelImprimirNFSe: TuRelImprimirNFSe
       end
       object GroupBox2: TGroupBox
         Left = 8
-        Top = 16
-        Width = 217
-        Height = 65
+        Top = 2
+        Width = 326
+        Height = 47
         Caption = 'Empresa'
-        TabOrder = 2
+        TabOrder = 0
         object comboEmpresa: TRxDBLookupCombo
           Left = 8
-          Top = 24
-          Width = 201
+          Top = 19
+          Width = 313
           Height = 21
           DropDownCount = 8
           LookupField = 'CEMP'
-          LookupDisplay = 'NOME'
+          LookupDisplay = 'NOM'
           LookupSource = DMConsNFSe.dsEmpresa
           TabOrder = 0
+          OnChange = comboEmpresaChange
         end
       end
       object BitBtn2: TBitBtn
-        Left = 424
-        Top = 21
+        Left = 782
+        Top = 37
         Width = 129
         Height = 28
         Caption = 'Consultar'
-        TabOrder = 3
+        TabOrder = 1
         OnClick = BitBtn2Click
         Glyph.Data = {
           76010000424D7601000000000000760000002800000020000000100000000100
@@ -248,16 +268,57 @@ object uRelImprimirNFSe: TuRelImprimirNFSe
           00337777FFFF77FF7733EEEE0000000003337777777777777333}
         NumGlyphs = 2
       end
+      object rdgTipo: TRadioGroup
+        Left = 539
+        Top = 5
+        Width = 144
+        Height = 97
+        Caption = 'Tipo'
+        ItemIndex = 0
+        Items.Strings = (
+          'Todas'
+          'Sem Canceladas'
+          'Somente Canceladas')
+        TabOrder = 4
+      end
+      object rgpImpressao: TRadioGroup
+        Left = 686
+        Top = 5
+        Width = 93
+        Height = 97
+        Caption = 'Impress'#227'o'
+        ItemIndex = 0
+        Items.Strings = (
+          'Imprimir'
+          'Gerar PDF')
+        TabOrder = 5
+      end
+      object GroupBox3: TGroupBox
+        Left = 8
+        Top = 50
+        Width = 326
+        Height = 52
+        Caption = 'Caminho PDF'
+        TabOrder = 6
+        object CaminhoPDF: TDirectoryEdit
+          Left = 8
+          Top = 20
+          Width = 312
+          Height = 21
+          NumGlyphs = 1
+          TabOrder = 0
+        end
+      end
     end
   end
   object dsPadrao: TDataSource
     DataSet = DMConsNFSe.cdsConsNFSe
-    Left = 728
-    Top = 16
+    Left = 784
+    Top = 8
   end
   object PopupMenu1: TPopupMenu
-    Left = 593
-    Top = 33
+    Left = 817
+    Top = 9
     object SelecionarTodos1: TMenuItem
       Caption = 'Selecionar Todos'
       OnClick = SelecionarTodos1Click

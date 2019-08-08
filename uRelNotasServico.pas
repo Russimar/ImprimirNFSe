@@ -9,6 +9,12 @@ uses
   RxLookup, SMDBGrid, Menus;
 
 type
+  TEnumSituacao = (noAll, noLessCancel, noOnlyCancel);
+
+type
+  TEnumImpressao = (noImprimir, noGerarPDF);
+
+type
   TuRelImprimirNFSe = class(TForm)
     Panel1: TPanel;
     Panel2: TPanel;
@@ -26,12 +32,17 @@ type
     BitBtn2: TBitBtn;
     PopupMenu1: TPopupMenu;
     SelecionarTodos1: TMenuItem;
+    rdgTipo: TRadioGroup;
+    rgpImpressao: TRadioGroup;
+    GroupBox3: TGroupBox;
+    CaminhoPDF: TDirectoryEdit;
     procedure FormShow(Sender: TObject);
     procedure BitBtn2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure BitBtn1Click(Sender: TObject);
     procedure SelecionarTodos1Click(Sender: TObject);
+    procedure comboEmpresaChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -49,13 +60,15 @@ implementation
 
 procedure TuRelImprimirNFSe.FormShow(Sender: TObject);
 begin
-  DateInicial.Date := 43466;
-  DateFinal.Date := 43496;  
+//  DateInicial.Date := 43466;
+//  DateFinal.Date := 43496;  
   fDMConsNFSe.cdsEmpresa.Close;
   fDMConsNFSe.cdsEmpresa.Open;
 end;
 
 procedure TuRelImprimirNFSe.BitBtn2Click(Sender: TObject);
+var
+  Tipo : string;
 begin
   if DateInicial.Date < 10 then
   begin
@@ -75,7 +88,12 @@ begin
     comboEmpresa.SetFocus;
     Exit;
   end;
-
+  Tipo := '';
+  case TEnumSituacao(rdgTipo.ItemIndex) of
+    noLessCancel : Tipo := ' and COALESCE(SITUACAO,'''') <> ' + QuotedStr('C');
+    noOnlyCancel : Tipo := ' and COALESCE(SITUACAO,'''') = ' + QuotedStr('C');
+  end;
+  fDMConsNFSe.sdsConsNFSe.CommandText := fDMConsNFSe.ctNFSe + Tipo;
   fDMConsNFSe.cdsConsNFSe.Close;
   fDMConsNFSe.sdsConsNFSe.ParamByName('Empresa').AsString := comboEmpresa.Value;
   fDMConsNFSe.sdsConsNFSe.ParamByName('DataInicial').AsDate := DateInicial.Date;
@@ -100,6 +118,15 @@ begin
     MessageDlg('Nenhuma nota encontrada, refaça a consulta!', mtError,[mbOK],0);
     Exit;
   end;
+  case TEnumImpressao(rgpImpressao.ItemIndex) of
+    noGerarPDF :
+     if CaminhoPDF.Text = '' then
+     begin
+       MessageDlg('Quando a opção impressão for PDF, Informe o caminho!', mtError,[mbOK],0);
+       CaminhoPDF.SetFocus;
+       Exit;
+     end;
+  end;
   fDMConsNFSe.cdsConsNFSe.DisableControls;
   try
     fDMConsNFSe.cdsConsNFSe.First;
@@ -107,7 +134,10 @@ begin
     begin
       if SMDBGrid1.SelectedRows.CurrentRowSelected then
       begin
-        fDMConsNFSe.imprimirNFSe;
+        case TEnumImpressao(rgpImpressao.ItemIndex) of
+          noImprimir : fDMConsNFSe.imprimirNFSe('IMP',CaminhoPDF.Text);
+          noGerarPDF : fDMConsNFSe.imprimirNFSe('PDF',CaminhoPDF.Text);
+        end;
       end;
       fDMConsNFSe.cdsConsNFSe.Next;
     end;
@@ -130,6 +160,11 @@ begin
   finally
     fDMConsNFSe.cdsConsNFSe.EnableControls;
   end;
+end;
+
+procedure TuRelImprimirNFSe.comboEmpresaChange(Sender: TObject);
+begin
+  fDMConsNFSe.cdsConsNFSe.Close;
 end;
 
 end.

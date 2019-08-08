@@ -12,13 +12,15 @@ object DMConsNFSe: TDMConsNFSe
       'select NFE.NUMERO, NFE.COD_CADCLI, NFE.DATA_EMISSAO, NFE.CEMP, N' +
       'FE.SERIE, NFE.VALOR_TOTAL, NFE.ISSQN_VALOR,'#13#10'       NFE.IRRF_VAL' +
       'OR, NFE.PIS_VALOR, NFE.COFINS_VALOR, NFE.CSLL_VALOR, NFEC.XML, N' +
-      'FEC.CODIGOVERIFICACAO'#13#10'from FAT_NF_SERVICO NFE'#13#10'inner join CAD_C' +
-      'OLABORADOR C on C.COD_CADCOLABORADOR = NFE.COD_CADCLI'#13#10'inner joi' +
-      'n CAD_PESSOA P on C.CODIGO_PESSOA = P.CODIGO_PESSOA'#13#10'inner join ' +
-      'FAT_NF_SERVICO_COMUNICACAO NFEC on NFE.COD_FATNFSERVICO = NFEC.C' +
-      'OD_FATNFSERVICO'#13#10'where NFE.DATA_EMISSAO between :DATAINICIAL and' +
-      ' :DATAFINAL and'#13#10'      NFE.CEMP = :EMPRESA and'#13#10'      NFEC.tipo ' +
-      '= '#39'1'#39#13#10
+      'FEC.CODIGOVERIFICACAO, '#13#10'cast('#39'01'#39'||'#39'.'#39'||NFE.MES_COMPETENCIA || ' +
+      #39'.'#39' || NFE.ANO_COMPETENCIA as date) COMPETENCIA, COALESCE(SITUAC' +
+      'AO,'#39#39') Situacao '#13#10'from FAT_NF_SERVICO NFE'#13#10'inner join CAD_COLABO' +
+      'RADOR C on C.COD_CADCOLABORADOR = NFE.COD_CADCLI'#13#10'inner join CAD' +
+      '_PESSOA P on C.CODIGO_PESSOA = P.CODIGO_PESSOA'#13#10'inner join FAT_N' +
+      'F_SERVICO_COMUNICACAO NFEC on NFE.COD_FATNFSERVICO = NFEC.COD_FA' +
+      'TNFSERVICO'#13#10'where NFE.DATA_EMISSAO between :DATAINICIAL and :DAT' +
+      'AFINAL and'#13#10'      NFE.CEMP = :EMPRESA and'#13#10'      NFEC.tipo = '#39'1'#39 +
+      ' '#13#10
     MaxBlobSize = -1
     Params = <
       item
@@ -136,11 +138,22 @@ object DMConsNFSe: TDMConsNFSe
     object cdsConsNFSeCODIGOVERIFICACAO: TStringField
       FieldName = 'CODIGOVERIFICACAO'
     end
+    object cdsConsNFSeCOMPETENCIA: TDateField
+      FieldName = 'COMPETENCIA'
+    end
+    object cdsConsNFSeSITUACAO: TStringField
+      FieldName = 'SITUACAO'
+      FixedChar = True
+      Size = 1
+    end
   end
   object sdsEmpresa: TSQLDataSet
     NoMetadata = True
     GetMetadata = False
-    CommandText = 'select COD_CADEMPRESA, NOME, CEMP, LOGOTIPO from CAD_EMPRESA'
+    CommandText = 
+      'select E.CEMP, E.NOM, E.FANT, E.LGR, E.ENDE, E.CID, E.BAI, E.EST' +
+      ', E.NR, E.CEND, E.PFON1, E.NFON1, E.NDOC, E.LOGOTIPO, E.IMUN '#13#10'f' +
+      'rom CADEMP E  '
     MaxBlobSize = -1
     Params = <>
     SQLConnection = DMConection.Connection
@@ -158,24 +171,67 @@ object DMConsNFSe: TDMConsNFSe
     ProviderName = 'dspEmpresa'
     Left = 144
     Top = 104
-    object cdsEmpresaCOD_CADEMPRESA: TIntegerField
-      FieldName = 'COD_CADEMPRESA'
-      Required = True
-    end
-    object cdsEmpresaNOME: TStringField
-      FieldName = 'NOME'
-      Required = True
-      Size = 100
-    end
     object cdsEmpresaCEMP: TStringField
       FieldName = 'CEMP'
-      Required = True
       FixedChar = True
       Size = 2
+    end
+    object cdsEmpresaNOM: TStringField
+      FieldName = 'NOM'
+      Size = 100
+    end
+    object cdsEmpresaFANT: TStringField
+      FieldName = 'FANT'
+      Size = 40
+    end
+    object cdsEmpresaLGR: TStringField
+      FieldName = 'LGR'
+      Size = 30
+    end
+    object cdsEmpresaENDE: TStringField
+      FieldName = 'ENDE'
+      Size = 72
+    end
+    object cdsEmpresaCID: TStringField
+      FieldName = 'CID'
+      Size = 72
+    end
+    object cdsEmpresaBAI: TStringField
+      FieldName = 'BAI'
+      Size = 72
+    end
+    object cdsEmpresaEST: TStringField
+      FieldName = 'EST'
+      FixedChar = True
+      Size = 2
+    end
+    object cdsEmpresaNR: TStringField
+      FieldName = 'NR'
+      Size = 15
+    end
+    object cdsEmpresaCEND: TStringField
+      FieldName = 'CEND'
+      Size = 50
+    end
+    object cdsEmpresaPFON1: TStringField
+      FieldName = 'PFON1'
+      Size = 2
+    end
+    object cdsEmpresaNFON1: TStringField
+      FieldName = 'NFON1'
+      Size = 15
+    end
+    object cdsEmpresaNDOC: TStringField
+      FieldName = 'NDOC'
+      Size = 18
     end
     object cdsEmpresaLOGOTIPO: TBlobField
       FieldName = 'LOGOTIPO'
       Size = 1
+    end
+    object cdsEmpresaIMUN: TStringField
+      FieldName = 'IMUN'
+      Size = 15
     end
   end
   object dsEmpresa: TDataSource
