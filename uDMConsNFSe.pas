@@ -72,21 +72,17 @@ uses
 
 procedure TDMConsNFSe.imprimirNFSe(Tipo, Caminho : String);
 var
- stStreamNFSe, vLogo: TStringStream;
+ stStreamNFSe : TStringStream;
+ vCaminhoLogo : String;
 begin
   ACBrNFSe1.NotasFiscais.Clear;
   stStreamNFSe := TStringStream.Create(cdsConsNFSeXML.AsString);
   ACBrNFSe1.NotasFiscais.LoadFromStream(stStreamNFSe);
-//  vLogo := TStringStream.Create('');
-//  try
-//    cdsEmpresaLOGOTIPO.SaveToFile(Caminho +cdsEmpresaCEMP.AsString+'.bmp');
-//    vLogo.WriteString(cdsEmpresaLOGOTIPO.AsString);
-////    ACBrNFSe1.DANFSE.Logo := vLogo.DataString;
-//    ACBrNFSe1.DANFSE.Logo := Caminho+cdsEmpresaCEMP.AsString+'.bmp';
-//  finally
-//    FreeAndNil(vLogo);
-//  end;
-
+  vCaminhoLogo := ExtractFilePath(Application.ExeName) + cdsEmpresaCEMP.AsString + '.bmp';
+  if FileExists(vCaminhoLogo) then
+    ACBrNFSe1.DANFSE.Logo := vCaminhoLogo
+  else
+    ACBrNFSe1.DANFSE.Logo := EmptyStr;
   ACBrNFSe1.NotasFiscais.Items[0].NFSe.CodigoVerificacao := cdsConsNFSeCODIGOVERIFICACAO.AsString;
   ACBrNFSe1.NotasFiscais.Items[0].NFSe.Numero := cdsConsNFSeNUMERO.AsString;
   ACBrNFSe1.NotasFiscais.Items[0].NFSe.Competencia := DateToStr(cdsConsNFSeCOMPETENCIA.AsDateTime);
